@@ -628,8 +628,6 @@ class Optimizer:
     def __init__(self, model_encoder, model_student, model_teacher, model_teacherHead, model_teacherHead_distill, train_bagloader, train_instanceloader, val_bagloader, val_instanceloader, test_bagloader, test_instanceloader, n_epochs, lr, fold_id, weight_decay=1e-5, ckpt_dir="./results_CAMELYON_checkpoints", resume=''):
         self.num_epochs = n_epochs
         self.lr = lr
-        self.lr_schedule = lambda epoch: ((epoch < 9999) * (self.lr * (0.5 ** (epoch // args.lrdrop)))
-                                          + (epoch >= 9999) * self.lr * 0.1 ** 3)
 
         self.momentum = 0.9
         self.weight_decay = weight_decay
@@ -1003,7 +1001,7 @@ class Optimizer:
                 #pred_byStudent = torch.softmax(sim_scores_student, dim=1)[:, 3]
                 pred_byStudent = torch.sigmoid(sim_scores_student)[:, 3]
 
-                hardPos_hardNeg_thresholds = [int(self.StuFilterType.split('_')[1]) / 10000.0,
+                hardPos_hardNeg_thresholds = [int(self.StuFilterType.split('_')[1]) / 100.0,
                                                 int(self.StuFilterType.split('_')[2]) / 100.0]
 
                 idx_easy_pos = torch.where(pred_byStudent >= hardPos_hardNeg_thresholds[0])[0]
@@ -1303,7 +1301,7 @@ class Optimizer:
                 #pred_byStudent = torch.softmax(sim_scores_student, dim=1)[:, 3]
                 pred_byStudent = torch.sigmoid(sim_scores_student)[:, 3]
 
-                hardPos_hardNeg_thresholds = [int(self.StuFilterType.split('_')[1]) / 10000.0,
+                hardPos_hardNeg_thresholds = [int(self.StuFilterType.split('_')[1]) / 100.0,
                                                 int(self.StuFilterType.split('_')[2]) / 100.0]
 
                 idx_easy_pos = torch.where(pred_byStudent >= hardPos_hardNeg_thresholds[0])[0]
