@@ -1254,7 +1254,7 @@ class Optimizer:
                 #pred_byStudent = torch.softmax(sim_scores_student, dim=1)[:, 1]
                 pred_byStudent = torch.sigmoid(sim_scores_student)[:, 1]
 
-                hardPos_hardNeg_thresholds = [int(self.StuFilterType.split('_')[1]) / 1000.0,
+                hardPos_hardNeg_thresholds = [int(self.StuFilterType.split('_')[1]) / 100.0,
                                                 int(self.StuFilterType.split('_')[2]) / 100.0]
 
                 idx_easy_pos = torch.where(pred_byStudent >= hardPos_hardNeg_thresholds[0])[0]
