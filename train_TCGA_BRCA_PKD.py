@@ -198,7 +198,7 @@ def print_eval_metric_summary(prefix, storage):
 Please download the pretrained CONCH model weights and put it in the folder.
 '''
 def load_conch(backbone_name="conch_ViT-B-16"):
-    model_path = './PKD/checkpoints/CONCH/pytorch_model.bin'
+    model_path = './checkpoints/CONCH/pytorch_model.bin'
     model, _ = create_model_from_pretrained(backbone_name, model_path)
     return model
 
@@ -422,6 +422,7 @@ class Feat_predictor_student(nn.Module):
         conch_model = load_conch(backbone_name="conch_ViT-B-16")
         self.text_encoder = TextEncoder(conch_model)
         self.logit_scale = conch_model.logit_scale
+        self.logit_scale.requires_grad_(False)
         self.dtype = torch.float64
         #self.predictor = nn.Sequential(nn.Linear(512, 2))
 
@@ -446,6 +447,7 @@ class Feat_predictor_teacher(nn.Module):
         conch_model = load_conch(backbone_name="conch_ViT-B-16")
         self.text_encoder = TextEncoder(conch_model)
         self.logit_scale = conch_model.logit_scale
+        self.logit_scale.requires_grad_(False)
         self.dtype = torch.float64
         #self.predictor = nn.Sequential(nn.Linear(512, 2))
 
