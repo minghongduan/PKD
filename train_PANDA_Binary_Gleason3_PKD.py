@@ -433,6 +433,7 @@ class Feat_predictor_student(nn.Module):
         conch_model = load_conch(backbone_name="conch_ViT-B-16")
         self.text_encoder = TextEncoder(conch_model)
         self.logit_scale = conch_model.logit_scale
+        self.logit_scale.requires_grad(False)
         self.dtype = torch.float64
         #self.predictor = nn.Sequential(nn.Linear(512, 2))
 
@@ -451,6 +452,7 @@ class Feat_predictor_teacher(nn.Module):
         conch_model = load_conch(backbone_name="conch_ViT-B-16")
         self.text_encoder = TextEncoder(conch_model)
         self.logit_scale = conch_model.logit_scale
+        self.logit_scale.requires_grad(False)
         self.dtype = torch.float64
 
     def forward(self, x):
