@@ -786,7 +786,7 @@ class Optimizer:
 
                 _, concept_feats_teacher = self.model_teacher(bag_features_teacher)
                 
-                sim_scores_teacher = bag_features_teacher @ concept_feats_teacher.detach().T * self.model_teacher.logit_scale.exp()
+                sim_scores_teacher = bag_features_teacher @ concept_feats_teacher.T * self.model_teacher.logit_scale.exp()
                 bag_prediction_teacher = torch.softmax(sim_scores_teacher, 1)
                 loss_teacher = self.model_teacherHead.get_loss(bag_prediction_teacher, label[1])
 
