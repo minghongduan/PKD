@@ -579,31 +579,6 @@ class map_abmil(nn.Module):
         return loss
 
 
-class map_dsmil(nn.Module):
-    def __init__(self, model):
-        super(map_dsmil, self).__init__()
-        self.model = model
-        self.criterion = torch.nn.CrossEntropyLoss()
-
-    def forward(self, x):
-        instance_attn_score, bag_prediction, _, _ = self.model(x)
-        instance_attn_score = torch.softmax(instance_attn_score, dim=1)
-        instance_attn_score = instance_attn_score[:, 1].unsqueeze(0)
-        return bag_prediction, instance_attn_score
-
-    def get_loss(self, output_bag, output_inst, bag_label):
-        # output shape: 1
-        # label shape: 1
-        max_id = torch.argmax(output_inst.squeeze(0))
-        bag_pred_byMax = output_inst.squeeze(0)[max_id]
-        bag_loss = self.criterion(output_bag, bag_label)
-
-        bag_label = bag_label.squeeze()
-        bag_loss_byMax = -1. * (bag_label * torch.log(bag_pred_byMax+1e-5) + (1. - bag_label) * torch.log(1. - bag_pred_byMax+1e-5))
-        loss = 0.5 * bag_loss + 0.5 * bag_loss_byMax
-        return loss
-
-
 class Optimizer:
     def __init__(self, model_encoder, model_student, model_teacher, model_teacherHead, model_teacherHead_distill, train_bagloader, train_instanceloader, val_bagloader, val_instanceloader, test_bagloader, test_instanceloader, n_epochs, lr, fold_id, weight_decay=1e-5, ckpt_dir="./results_CAMELYON_checkpoints", resume=''):
         self.num_epochs = n_epochs
